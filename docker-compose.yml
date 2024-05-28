@@ -8,8 +8,38 @@ networks:
     external: false
 
 services:
+  #webserver:
+  #  image: jsbroks/coco-annotator:webserver-stable
+  #  container_name: annotator_webclient
+  #  restart: always
+  #  ports:
+  #    - "5000:5000"
+  #  environment:
+  #    - SECRET_KEY=RandomSecretKeyHere
+  #    - FILE_WATCHER=true
+  #  volumes:
+  #    - "./datasets:/datasets"
+  #    - "./models:/models"
+  #  depends_on:
+  #    - database
+  #    - workers
+  #  networks:
+  #    - cocoannotator
+  #workers:
+  #  container_name: annotator_workers
+  #  image: jsbroks/coco-annotator:workers-stable
+  #  volumes:
+  #    - "./datasets:/datasets"
+  #  depends_on:
+  #    - messageq
+  #    - database
+  #  networks:
+  #    - cocoannotator
+  
   webserver:
-    image: jsbroks/coco-annotator:webserver-stable
+    build:
+      context: .
+      dockerfile: ./Dockerfile
     container_name: annotator_webclient
     restart: always
     ports:
@@ -17,6 +47,7 @@ services:
     environment:
       - SECRET_KEY=RandomSecretKeyHere
       - FILE_WATCHER=true
+      - NAME=Test Annotator
     volumes:
       - "./datasets:/datasets"
       - "./models:/models"
@@ -27,14 +58,23 @@ services:
       - cocoannotator
   workers:
     container_name: annotator_workers
-    image: jsbroks/coco-annotator:workers-stable
+    build:
+      context: .
+      dockerfile: ./backend/workers/Dockerfile
     volumes:
+      - "./backend/config:/workspace/config"
+      - "./backend/webserver:/workspace/webserver"
+      - "./backend/workers:/workspace/workers"
+      - "./backend/database:/workspace/database"
       - "./datasets:/datasets"
     depends_on:
       - messageq
       - database
+    ports:
+      - 5555:5555
     networks:
       - cocoannotator
+      
   messageq:
     image: rabbitmq:3
     container_name: annotator_message_q

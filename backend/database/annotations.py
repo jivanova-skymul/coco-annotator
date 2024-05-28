@@ -73,7 +73,9 @@ class AnnotationModel(DynamicDocument):
             self.creator = current_user.username
         else:
             self.creator = 'system'
-
+        
+        # print("\n\n\n\n\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n\n\n\n\n")
+        # self.info(f'Creating annotation model with keypoints: {self.keypoints}')
         return super(AnnotationModel, self).save(*args, **kwargs)
 
     def is_empty(self):
@@ -83,7 +85,7 @@ class AnnotationModel(DynamicDocument):
         """ Returns binary mask of annotation """
         mask = np.zeros((self.height, self.width))
         pts = [
-            np.array(anno).reshape(-1, 2).round().astype(int)
+            np.array(anno).reshape(-1, 3).round().astype(float)
             for anno in self.segmentation
         ]
         mask = cv2.fillPoly(mask, pts, 1)

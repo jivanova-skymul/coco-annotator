@@ -141,7 +141,7 @@ class AnnotatorData(Resource):
             set__num_annotations=num_annotations
         )
 
-        thumbnails.generate_thumbnail(image_model)
+        # thumbnails.generate_thumbnail(image_model)
 
         return {"success": True}
 

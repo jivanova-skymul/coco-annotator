@@ -171,14 +171,17 @@ export class Keypoints extends paper.Group {
       let index = k.indexLabel;
 
       if (index == -1) {
-        array.push(...[Math.round(point.x), Math.round(point.y), k.visibility]);
+        array.push(...[Math.round(point.x*1000)/1000, Math.round(point.y*1000)/1000, k.visibility]);
+        // array.push(...[point.x, point.y, k.visibility]);
       } else {
         index = (index - 1) * 3;
-        array[index] = Math.round(point.x);
-        array[index + 1] = Math.round(point.y);
+        array[index] = Math.round(point.x*1000)/1000;
+        array[index + 1] = Math.round(point.y*1000)/1000;
         array[index + 2] = Math.round(k.visibility);
       }
     });
+
+    console.log("CHECKING THE EXPORTJSON!!!!!");
 
     return array;
   }

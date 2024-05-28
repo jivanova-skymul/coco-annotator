@@ -280,6 +280,7 @@ def import_annotations(task_id, dataset_id, coco_json):
 
             if has_keypoints:
                 annotation_model.keypoints = keypoints
+                # task.info(f'Creatting annotation model with keypoints: {keypoints}')
 
             annotation_model.isbbox = isbbox
             annotation_model.save()

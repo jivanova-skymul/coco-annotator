@@ -42,6 +42,7 @@ class Annotation(Resource):
         metadata = args.get('metadata', {})
         segmentation = args.get('segmentation', [])
         keypoints = args.get('keypoints', [])
+        print('keypoints in Annotation class (post):', keypoints)
 
         image = current_user.images.filter(id=image_id, deleted=False).first()
         if image is None:
